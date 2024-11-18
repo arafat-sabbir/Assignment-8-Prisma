@@ -38,7 +38,7 @@ const globalErrorHandler: ErrorRequestHandler = (
   if (error instanceof ZodError) {
     const simplifiedError = handleZodError(error);
     statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
+    message = simplifiedError?.message as any;
     errorSources = simplifiedError?.errorSources;
     stack = config.node_env === "development" && error.stack;
 

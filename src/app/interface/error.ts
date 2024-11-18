@@ -6,6 +6,6 @@ export type TErrorSources = {
 export type TGenericErrorResponse = {
   statusCode: number;
   success: boolean;
-  message: string;
+  message: string | string[];
   errorSources: TErrorSources;
 };

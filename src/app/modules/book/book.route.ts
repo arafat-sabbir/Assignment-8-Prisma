@@ -1,10 +1,16 @@
 import express from "express";
 import { bookControllers } from "./book.controller";
+import validateRequest from "../../middlewares/validateRequest";
+import { bookValidations } from "./book.validation";
 
 const router = express.Router();
 
 // Router To Create A New Book
-router.post("/", bookControllers.addNewBook);
+router.post(
+  "/",
+  validateRequest(bookValidations.addNewBookSchema),
+  bookControllers.addNewBook
+);
 
 // Router To Get All Books From Database
 router.get("/", bookControllers.getAllBook);

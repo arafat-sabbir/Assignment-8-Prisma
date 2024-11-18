@@ -7,6 +7,7 @@ import sendResponse from "../../utils/sendResponse";
 const addNewBook = catchAsync(async (req: Request, res: Response) => {
   const result = await bookServices.addNewBookIntoDb(req.body);
   sendResponse(res, {
+    statusCode: 201,
     message: "Book created successfully",
     data: result,
   });
