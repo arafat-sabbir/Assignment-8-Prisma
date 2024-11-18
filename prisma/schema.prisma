@@ -35,3 +35,5 @@ model BorrowRecord {
   member     Member   @relation(fields: [memberId], references: [memberId])
   memberId   String
 }
+
+
