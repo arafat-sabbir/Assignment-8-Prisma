@@ -8,18 +8,30 @@ datasource db {
 }
 
 model Book {
-  bookId          String @id @default(uuid())
+  bookId          String         @id @default(uuid())
   title           String
   genre           String
   publishedYear   Int
   totalCopies     Int
   availableCopies Int
+  BorrowRecord    BorrowRecord[]
 }
 
-model member {
-  memberId       String   @id @default(uuid())
+model Member {
+  memberId       String         @id @default(uuid())
   name           String
-  email          String   @unique
+  email          String         @unique
   phone          String
   membershipDate DateTime
+  BorrowRecord   BorrowRecord[]
+}
+
+model BorrowRecord {
+  borrowId   String   @id @default(uuid())
+  borrowDate DateTime
+  returnDate DateTime
+  book       Book     @relation(fields: [bookId], references: [bookId])
+  bookId     String
+  member     Member   @relation(fields: [memberId], references: [memberId])
+  memberId   String
 }

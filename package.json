@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "lint": "npx eslint src --ignore-pattern .ts",
-    "lint:fix": "npx eslint src --fix"
+    "lint:fix": "npx eslint src --fix",
+    "migrate": "npx prisma migrate dev",
+    "studio": "npx prisma studio"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
