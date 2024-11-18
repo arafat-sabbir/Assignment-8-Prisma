@@ -7,7 +7,7 @@ import sendResponse from "../../utils/sendResponse";
 const addNewBook = catchAsync(async (req: Request, res: Response) => {
   const result = await bookServices.addNewBookIntoDb(req.body);
   sendResponse(res, {
-    message: "New Book added successfully",
+    message: "Book created successfully",
     data: result,
   });
 });
@@ -16,7 +16,7 @@ const addNewBook = catchAsync(async (req: Request, res: Response) => {
 const getAllBook = catchAsync(async (req: Request, res: Response) => {
   const result = await bookServices.getAllBookFromDb();
   sendResponse(res, {
-    message: "All Books retrieved successfully",
+    message: "Books retrieved successfully",
     data: result,
   });
 });
@@ -25,7 +25,7 @@ const getAllBook = catchAsync(async (req: Request, res: Response) => {
 const getSingleBook = catchAsync(async (req: Request, res: Response) => {
   const result = await bookServices.getSingleBookFromDb(req.params.bookId);
   sendResponse(res, {
-    message: "Single Book retrieved successfully",
+    message: "Book retrieved successfully",
     data: result,
   });
 });
