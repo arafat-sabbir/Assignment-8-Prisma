@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { bookRoutes } from "../modules/book/book.route";
-import { memberRoutes } from "../modules/member/member.route";
+import { bookRoutes } from "../modules/book/book.routes";
+import { memberRoutes } from "../modules/member/member.routes";
+import { borrowRoutes } from "../modules/borrow/borrow.routes";
 
 const router = Router();
 
@@ -12,6 +13,10 @@ const routes = [
   {
     path: "/members",
     router: memberRoutes,
+  },
+  {
+    path: "",
+    router: borrowRoutes,
   },
 ];
 

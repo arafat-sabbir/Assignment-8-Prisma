@@ -14,7 +14,7 @@ const addNewMemberSchema = z.object({
       required_error: "Phone is required",
       invalid_type_error: "Phone must be a string",
     }),
-    membershipDate: z.date({
+    membershipDate: z.string({
       required_error: "Membership date is required",
       invalid_type_error: "Membership date must be a valid date",
     }),
