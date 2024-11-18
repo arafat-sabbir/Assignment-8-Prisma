@@ -18,6 +18,10 @@ router.get("/", bookControllers.getAllBook);
 // Router To Get Single Book By bookId From Database
 router.get("/:bookId", bookControllers.getSingleBook);
 
+// Router To Update Single Book By bookId From Database
 router.patch("/:bookId", bookControllers.updateSingleBook);
+
+// Router to Delete Single Book By bookId From Database
+router.delete("/:bookId", bookControllers.deleteSingleBook);
 
 export const bookRoutes = router;

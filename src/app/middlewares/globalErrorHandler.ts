@@ -23,7 +23,6 @@ const globalErrorHandler: ErrorRequestHandler = (
   res: Response<TGenericErrorResponse>,
   next
 ) => {
-  // Set default values for status code, message, and error sources.
   let statusCode = 500;
   let stack = null;
   let message = "Something Went Wrong";
@@ -34,17 +33,14 @@ const globalErrorHandler: ErrorRequestHandler = (
     },
   ];
 
-  // Handle Zod schema validation errors
   if (error instanceof ZodError) {
     const simplifiedError = handleZodError(error);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message as any;
     errorSources = simplifiedError?.errorSources;
     stack = config.node_env === "development" && error.stack;
-
-    // Handle Prisma errors
   } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    // Example: Handle unique constraint violations
+    // Handle known Prisma errors like unique constraint violations
     if (error.code === "P2002") {
       statusCode = 400;
       message = "Unique constraint failed";
@@ -52,6 +48,17 @@ const globalErrorHandler: ErrorRequestHandler = (
         {
           path: error.meta?.target ? error.meta.target.toString() : "unknown",
           message: "A record with this value already exists.",
+        },
+      ];
+    }
+    // Handle record not found scenario
+    if (error.code === "P2025") {
+      statusCode = 404;
+      message = error?.message;
+      errorSources = [
+        {
+          path: " ",
+          message: error?.message,
         },
       ];
     }
@@ -77,7 +84,6 @@ const globalErrorHandler: ErrorRequestHandler = (
     ];
     stack = config.node_env === "development" && error.stack;
   } else if (error instanceof AppError) {
-    // Handle application-specific errors
     statusCode = error?.statusCode;
     message = error?.message;
     errorSources = [
@@ -88,7 +94,6 @@ const globalErrorHandler: ErrorRequestHandler = (
     ];
     stack = config.node_env === "development" && error.stack;
   } else if (error instanceof Error) {
-    // Handle generic errors
     message = error?.message;
     errorSources = [
       {
@@ -99,7 +104,6 @@ const globalErrorHandler: ErrorRequestHandler = (
     stack = config.node_env === "development" && error.stack;
   }
 
-  // Return a JSON response with the error message and status code.
   res.status(statusCode).json({
     statusCode,
     success: false,

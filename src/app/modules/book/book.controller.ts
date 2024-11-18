@@ -31,6 +31,7 @@ const getSingleBook = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Controller Function To Update Single Book
 const updateSingleBook = catchAsync(async (req: Request, res: Response) => {
   const result = await bookServices.updateSingleBookFromDb(
     req.params.bookId,
@@ -42,4 +43,18 @@ const updateSingleBook = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const bookControllers = { addNewBook, getAllBook, getSingleBook,updateSingleBook };
+// Controller Function To Update Single Book
+const deleteSingleBook = catchAsync(async (req: Request, res: Response) => {
+  await bookServices.deleteSingleBookFromDb(req.params.bookId);
+  sendResponse(res, {
+    message: "Book successfully deleted",
+  });
+});
+
+export const bookControllers = {
+  addNewBook,
+  getAllBook,
+  getSingleBook,
+  updateSingleBook,
+  deleteSingleBook,
+};

@@ -16,19 +16,42 @@ const getAllBookFromDb = async () => {
 
 // Service Function To Retrieve Specific  Book By It's Id From Database
 const getSingleBookFromDb = async (bookId: string) => {
-  return await prisma.book.findUnique({
+  return await prisma.book.findUniqueOrThrow({
     where: { bookId },
   });
 };
 
-// Service Function To Update Specific  Book By It's Id From Database
+// Service Function To Update Specific Book By Its Id From Database
 const updateSingleBookFromDb = async (bookId: string, data: Book) => {
+  const initialData: Record<string, unknown> = {};
+
+  // Filter out keys with null, undefined, or empty values
+  Object.keys(data).forEach((key) => {
+    if (data[key] !== null && data[key] !== undefined && data[key] !== "") {
+      initialData[key] = data[key];
+    }
+  });
+
+  // Ensure the book exists before updating
   await prisma.book.findUniqueOrThrow({
     where: { bookId },
   });
+
+  // Update the book with filtered data
   return await prisma.book.update({
     where: { bookId },
-    data,
+    data: initialData,
+  });
+};
+
+// Delete Specific Book By Its Id From Database
+const deleteSingleBookFromDb = async (bookId: string) => {
+  // Ensure the book exists before deleting
+  await prisma.book.findUniqueOrThrow({
+    where: { bookId },
+  });
+  return await prisma.book.delete({
+    where: { bookId },
   });
 };
 
@@ -37,4 +60,5 @@ export const bookServices = {
   getAllBookFromDb,
   getSingleBookFromDb,
   updateSingleBookFromDb,
+  deleteSingleBookFromDb
 };
