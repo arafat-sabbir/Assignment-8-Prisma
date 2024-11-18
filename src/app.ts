@@ -2,6 +2,7 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import allRoutes from "./app/routes";
 import cors from "cors";
+import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 const app: Application = express();
 export const prisma = new PrismaClient();
 
@@ -59,6 +60,8 @@ app.use("/api/v1", allRoutes);
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
+
+app.use(globalErrorHandler);
 
 // Handle 404 - Not Found
 app.all("*", (req: Request, res: Response) => {
