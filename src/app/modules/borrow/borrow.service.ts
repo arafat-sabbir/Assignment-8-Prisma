@@ -15,7 +15,16 @@ const returnBook = async (payload: any) => {
   });
 };
 
+const getOverDueBooks = async () => {
+  const today = new Date();
+  // Find books where the due date (borrowDate + 14 days) is earlier than today
+  return await prisma.borrow.findMany({
+    where: {
+      borrowDate: {
+        lt: new Date(today.getTime() - 14 * 24 * 60 * 60 * 1000), // 14 days before today
+      },
+    },
+  });
+};
 
-
-
-export const borrowServices = { borrowBook, returnBook };
+export const borrowServices = { borrowBook, returnBook, getOverDueBooks };

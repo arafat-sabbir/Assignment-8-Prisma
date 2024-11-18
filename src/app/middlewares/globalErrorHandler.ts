@@ -37,70 +37,93 @@ const globalErrorHandler: ErrorRequestHandler = (
     const simplifiedError = handleZodError(error);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message as any;
-    errorSources = simplifiedError?.errorSources;
+    errorSources =
+      config.node_env === "development"
+        ? simplifiedError?.errorSources
+        : ([] as any);
     stack = config.node_env === "development" && error.stack;
   } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
     // Handle known Prisma errors like unique constraint violations
     if (error.code === "P2002") {
       statusCode = 400;
       message = "Unique constraint failed";
-      errorSources = [
-        {
-          path: error.meta?.target ? error.meta.target.toString() : "unknown",
-          message: "A record with this value already exists.",
-        },
-      ];
+      errorSources =
+        config.node_env === "development"
+          ? [
+              {
+                path: error.meta?.target
+                  ? error.meta.target.toString()
+                  : "unknown",
+                message: "A record with this value already exists.",
+              },
+            ]
+          : [];
     }
     // Handle record not found scenario
     if (error.code === "P2025") {
       statusCode = 404;
       message = error?.message;
-      errorSources = [
-        {
-          path: " ",
-          message: error?.message,
-        },
-      ];
+      errorSources =
+        config.node_env === "development"
+          ? [
+              {
+                path: " ",
+                message: error?.message,
+              },
+            ]
+          : [];
     }
     stack = config.node_env === "development" && error.stack;
   } else if (error instanceof Prisma.PrismaClientValidationError) {
     statusCode = 400;
     message = extractMeaningfulMessage(error.message);
-    errorSources = [
-      {
-        path: " ",
-        message: extractMeaningfulMessage(error.message),
-      },
-    ];
+    errorSources =
+      config.node_env === "development"
+        ? [
+            {
+              path: " ",
+              message: extractMeaningfulMessage(error.message),
+            },
+          ]
+        : [];
     stack = config.node_env === "development" && error.stack;
   } else if (error instanceof Prisma.PrismaClientUnknownRequestError) {
     statusCode = 500;
     message = "Unknown Database Error";
-    errorSources = [
-      {
-        path: " ",
-        message: error.message,
-      },
-    ];
+    errorSources =
+      config.node_env === "development"
+        ? [
+            {
+              path: " ",
+              message: error.message,
+            },
+          ]
+        : [];
     stack = config.node_env === "development" && error.stack;
   } else if (error instanceof AppError) {
     statusCode = error?.statusCode;
     message = error?.message;
-    errorSources = [
-      {
-        path: " ",
-        message: error.message,
-      },
-    ];
+    errorSources =
+      config.node_env === "development"
+        ? [
+            {
+              path: " ",
+              message: error.message,
+            },
+          ]
+        : [];
     stack = config.node_env === "development" && error.stack;
   } else if (error instanceof Error) {
     message = error?.message;
-    errorSources = [
-      {
-        path: " ",
-        message: error.message,
-      },
-    ];
+    errorSources =
+      config.node_env === "development"
+        ? [
+            {
+              path: " ",
+              message: error.message,
+            },
+          ]
+        : [];
     stack = config.node_env === "development" && error.stack;
   }
 
@@ -108,8 +131,8 @@ const globalErrorHandler: ErrorRequestHandler = (
     statusCode,
     success: false,
     message,
-    errorSources,
-    ...(stack && { stack }),
+    ...(errorSources?.length ? { errorSources } : {}),
+    ...(stack ? { stack } : {}),
   });
 };
 

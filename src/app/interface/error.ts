@@ -7,5 +7,5 @@ export type TGenericErrorResponse = {
   statusCode: number;
   success: boolean;
   message: string | string[];
-  errorSources: TErrorSources;
+  errorSources?: TErrorSources;
 };
