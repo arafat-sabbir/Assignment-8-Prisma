@@ -52,7 +52,7 @@ const test = (req, res) => {
 };
 app.get("/", test);
 // Use routes
-app.use("/api/v1", routes_1.default);
+app.use("/api", routes_1.default);
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
