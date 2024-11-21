@@ -55,7 +55,7 @@ const test = (req: Request, res: Response) => {
 app.get("/", test);
 
 // Use routes
-app.use("/api/v1", allRoutes);
+app.use("/api", allRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
