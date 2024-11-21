@@ -22,13 +22,15 @@ const getSingleBookFromDb = async (bookId: string) => {
 };
 
 // Service Function To Update Specific Book By Its Id From Database
-const updateSingleBookFromDb = async (bookId: string, data: Book) => {
+const updateSingleBookFromDb = async (
+  bookId: string,
+  data: Record<string, any>
+) => {
   const initialData: Record<string, unknown> = {};
-
-  // Filter out keys with null, undefined, or empty values
   Object.keys(data).forEach((key) => {
-    if (data[key] !== null && data[key] !== undefined && data[key] !== "") {
-      initialData[key] = data[key];
+    const value = data[key]; // Safely store value in a variable
+    if (value !== null && value !== undefined && value !== "") {
+      initialData[key] = value;
     }
   });
 
@@ -60,5 +62,5 @@ export const bookServices = {
   getAllBookFromDb,
   getSingleBookFromDb,
   updateSingleBookFromDb,
-  deleteSingleBookFromDb
+  deleteSingleBookFromDb,
 };

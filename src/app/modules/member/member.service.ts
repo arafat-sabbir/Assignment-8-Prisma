@@ -22,13 +22,17 @@ const getSingleMemberFromDb = async (memberId: string) => {
 };
 
 // Service Function To Update Specific Member By Its Id From Database
-const updateSingleMemberFromDb = async (memberId: string, data: Member) => {
+const updateSingleMemberFromDb = async (
+  memberId: string,
+  data: Record<string, unknown>
+) => {
   const initialData: Record<string, unknown> = {};
 
   // Filter out keys with null, undefined, or empty values
   Object.keys(data).forEach((key) => {
-    if (data[key] !== null && data[key] !== undefined && data[key] !== "") {
-      initialData[key] = data[key];
+    const value = data[key];
+    if (value !== null && value !== undefined && value !== "") {
+      initialData[key] = value;
     }
   });
 
